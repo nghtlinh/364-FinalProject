@@ -2,7 +2,7 @@ from src.maze import Maze
 from src.maze_viz import Visualizer
 from src.solver import DepthFirst
 from src.solver import BreadthFirst
-from src.solver import AStar
+from src.solverAStar import AStar
 
 class MazeManager(object):
     """A manager that abstracts the interaction with the library's components. The graphs, animations, maze creation,
@@ -97,31 +97,6 @@ class MazeManager(object):
         """Gets the number of mazes that the manager is holding"""
         return self.mazes.__len__()
 
-    def solve_maze(self, maze_id, method, neighbor_method="fancy"):
-        """ Called to solve a maze by a particular method. The method
-        is specified by a string.
-
-        Args:
-            maze_id (int): The id of the maze that will be solved
-            method (string): The name of the method (see above)
-            neighbor_method:
-
-        """
-        maze = self.get_maze(maze_id)
-        if maze is None:
-            print("Unable to locate maze. Exiting solver.")
-            return None
-        
-        if method == "DepthFirst":
-            solver = DepthFirst(maze, neighbor_method, self.quiet_mode)
-            maze.solution_path = solver.solve()
-        elif method == "BreadthFirst":
-            solver = BreadthFirst(maze, neighbor_method, self.quiet_mode)
-            maze.solution_path = solver.solve()
-        elif method == "AStar":
-            solver = AStar(maze, neighbor_method, self.quiet_mode)
-            maze.solution_path = solver.solve()
-
     def show_maze(self, id, cell_size=1):
         """Just show the generation animation and maze"""
         vis = Visualizer(self.get_maze(id), cell_size, self.media_name)
@@ -165,3 +140,42 @@ class MazeManager(object):
                 enabled (bool): True when quiet mode is on, False when it is off
         """
         self.quiet_mode=enabled
+        
+    def solve_maze(self, maze_id, method, neighbor_method="fancy"):
+        """ Called to solve a maze by a particular method. The method
+        is specified by a string.
+
+        Args:
+            maze_id (int): The id of the maze that will be solved
+            method (string): The name of the method (see above)
+            neighbor_method:
+
+        """
+        maze = self.get_maze(maze_id)
+        if maze is None:
+            print("Unable to locate maze. Exiting solver.")
+            return None
+        
+        if method == "DepthFirst":
+            solver = DepthFirst(maze, neighbor_method, self.quiet_mode)
+            maze.solution_path = solver.solve()
+        elif method == "BreadthFirst":
+            solver = BreadthFirst(maze, neighbor_method, self.quiet_mode)
+            maze.solution_path = solver.solve()
+            
+    def solve_maze_with_A_Star(self, maze_id, method, heuristic_method, neighbor_method="fancy"):
+        """ Called to solve a maze by A Star method
+
+        Args:
+            maze_id (int): The id of the maze that will be solved
+            method (string): The name of the method (see above)
+            neighbor_method:
+
+        """
+        maze = self.get_maze(maze_id)
+        if maze is None:
+            print("Unable to locate maze. Exiting solver.")
+            return None
+        
+        solver = AStar(maze, neighbor_method, self.quiet_mode, heuristic_method)
+        maze.solution_path = solver.solve()

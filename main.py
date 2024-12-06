@@ -13,7 +13,8 @@ if __name__ == "__main__":
     # Solve the maze using multiple algorithms
     manager.solve_maze(maze.id, "DepthFirst")
     # manager.solve_maze(maze.id, "BreadthFirst")
-    # manager.solve_maze(maze.id, "AStar")
+    # manager.solve_maze_with_A_Star(maze.id, "AStar", "Manhattan")
+    # manager.solve_maze_with_A_Star(maze.id, "AStar", "Euclidean")
 
     # Display the unsolved maze.
     # manager.show_maze(maze.id)
