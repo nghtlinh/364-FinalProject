@@ -1,10 +1,8 @@
-
 import random
 import math
 import time
 from src.cell import Cell
 from src.algorithm import depth_first_recursive_backtracker, binary_tree
-
 
 class Maze(object):
     """Class representing a maze; a 2D grid of Cell objects. Contains functions
@@ -21,9 +19,9 @@ class Maze(object):
         solution_path : The path that was taken by a solver when solving the maze
         initial_grid (list):
         grid (list): A copy of initial_grid (possible this is un-needed)
-        """
+    """
 
-    def __init__(self, num_rows, num_cols, id=0, algorithm = "dfs_backtrack"):
+    def __init__(self, num_rows, num_cols, id=0, algorithm="dfs_backtrack"):
         """Creates a gird of Cell objects that are neighbors to each other.
 
             Args:
@@ -35,7 +33,7 @@ class Maze(object):
         self.num_cols = num_cols
         self.num_rows = num_rows
         self.id = id
-        self.grid_size = num_rows*num_cols
+        self.grid_size = num_rows * num_cols
         self.entry_coor = self._pick_random_entry_exit(None)
         self.exit_coor = self._pick_random_entry_exit(self.entry_coor)
         self.generation_path = []
@@ -84,16 +82,16 @@ class Maze(object):
             if row >= 0 and row < self.num_rows and col >= 0 and col < self.num_cols:
                 neighbours.append((row, col))
 
-        check_neighbour(cell_row-1, cell_col)     # Top neighbour
-        check_neighbour(cell_row, cell_col+1)     # Right neighbour
-        check_neighbour(cell_row+1, cell_col)     # Bottom neighbour
-        check_neighbour(cell_row, cell_col-1)     # Left neighbour
+        check_neighbour(cell_row - 1, cell_col)  # Top neighbour
+        check_neighbour(cell_row, cell_col + 1)  # Right neighbour
+        check_neighbour(cell_row + 1, cell_col)  # Bottom neighbour
+        check_neighbour(cell_row, cell_col - 1)  # Left neighbour
 
         if len(neighbours) > 0:
             return neighbours
 
         else:
-            return None     # None if no unvisited neighbours found
+            return None  # None if no unvisited neighbours found
 
     def _validate_neighbours_generate(self, neighbour_indices):
         """Function that validates whether a neighbour is unvisited or not. When generating
@@ -115,7 +113,7 @@ class Maze(object):
         else:
             return None
 
-    def validate_neighbours_solve(self, neighbour_indices, k, l, k_end, l_end, method = "fancy"):
+    def validate_neighbours_solve(self, neighbour_indices, k, l, k_end, l_end, method="fancy"):
         """Function that validates whether a neighbour is unvisited or not and discards the
         neighbours that are inaccessible due to walls between them and the current cell. The
         function implements two methods for choosing next cell; one is 'brute-force' where one
@@ -131,7 +129,6 @@ class Maze(object):
             method
 
         Return:
-
 
         """
         if method == "fancy":
@@ -160,36 +157,37 @@ class Maze(object):
             return None
 
     def _pick_random_entry_exit(self, used_entry_exit=None):
-        """Function that picks random coordinates along the maze boundary to represent either
-        the entry or exit point of the maze. Makes sure they are not at the same place.
+        """Sets fixed entry and exit points for the maze."""
+        if used_entry_exit is None:  # For the entry point
+            return (0, self.num_cols // 2)  # Entry at the middle of the top row
+        else:  # For the exit point
+            return (self.num_rows - 1, self.num_cols // 3)  # Exit at one-third of the bottom row
 
-        Args:
-            used_entry_exit
+    def ensure_entry_exit_connectivity(self):
+        """Ensure there is a valid path between entry and exit points."""
+        visited = set()
+        stack = [self.entry_coor]
 
-        Return:
+        while stack:
+            current = stack.pop()
+            if current == self.exit_coor:
+                return  # A path already exists
 
-        """
-        rng_entry_exit = used_entry_exit    # Initialize with used value
+            visited.add(current)
 
-        # Try until unused location along boundary is found.
-        while rng_entry_exit == used_entry_exit:
-            rng_side = random.randint(0, 3)
+            for neighbor in self.find_neighbours(*current):
+                if neighbor not in visited:
+                    if self.grid[current[0]][current[1]].is_walls_between(self.grid[neighbor[0]][neighbor[1]]):
+                        # Remove walls to ensure connectivity
+                        self.grid[current[0]][current[1]].remove_walls(neighbor[0], neighbor[1])
+                        self.grid[neighbor[0]][neighbor[1]].remove_walls(current[0], current[1])
+                    stack.append(neighbor)
 
-            if (rng_side == 0):     # Top side
-                rng_entry_exit = (0, random.randint(0, self.num_cols-1))
+        # If no path exists, forcibly connect the entry and exit
+        self.grid[self.entry_coor[0]][self.entry_coor[1]].remove_walls(self.exit_coor[0], self.exit_coor[1])
+        self.grid[self.exit_coor[0]][self.exit_coor[1]].remove_walls(self.entry_coor[0], self.entry_coor[1])
 
-            elif (rng_side == 2):   # Right side
-                rng_entry_exit = (self.num_rows-1, random.randint(0, self.num_cols-1))
-
-            elif (rng_side == 1):   # Bottom side
-                rng_entry_exit = (random.randint(0, self.num_rows-1), self.num_cols-1)
-
-            elif (rng_side == 3):   # Left side
-                rng_entry_exit = (random.randint(0, self.num_rows-1), 0)
-
-        return rng_entry_exit       # Return entry/exit that is different from exit/entry
-
-    def generate_maze(self, algorithm, start_coor = (0, 0)):
+    def generate_maze(self, algorithm, start_coor=(0, 0)):
         """This takes the internal grid object and removes walls between cells using the
         depth-first recursive backtracker algorithm.
 
@@ -202,3 +200,6 @@ class Maze(object):
             depth_first_recursive_backtracker(self, start_coor)
         elif algorithm == "bin_tree":
             binary_tree(self, start_coor)
+
+        # Ensure entry and exit are connected
+        self.ensure_entry_exit_connectivity()

@@ -4,6 +4,7 @@ from src.solver import DepthFirst
 from src.solver import BreadthFirst
 from src.solverAStar import AStar
 
+
 class MazeManager(object):
     """A manager that abstracts the interaction with the library's components. The graphs, animations, maze creation,
     and solutions are all handled through the manager.
@@ -72,6 +73,7 @@ class MazeManager(object):
         self.mazes.append(maze)
         return maze
 
+
     def get_maze(self, id):
         """Get a maze by its id.
 
@@ -125,14 +127,6 @@ class MazeManager(object):
             Check if the id already belongs to an existing maze
         """
         return next((maze for maze in self.mazes if maze .id == id), None)
-
-    def set_filename(self, filename):
-        """ Sets the filename for saving animations and images
-            Args:
-                filename (string): The name of the file without an extension
-        """
-
-        self.media_name = filename
 
     def set_quiet_mode(self, enabled):
         """ Enables/Disables the quiet mode

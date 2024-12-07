@@ -2,8 +2,13 @@ import time
 import random
 import logging
 from src.maze import Maze
+import warnings
 
-logging.basicConfig(level=logging.DEBUG)
+logging.getLogger('matplotlib').setLevel(logging.WARNING)
+logging.getLogger('PIL').setLevel(logging.WARNING)
+warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
+logging.basicConfig(level=logging.INFO)  # Change to INFO to reduce verbosity
+
 
 class Solver(object):
     """Base class for solution methods.
