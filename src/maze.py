@@ -202,3 +202,16 @@ class Maze(object):
             depth_first_recursive_backtracker(self, start_coor)
         elif algorithm == "bin_tree":
             binary_tree(self, start_coor)
+
+    def reset_solution(self):
+        """Resets any solution-related state in the maze to its unsolved state."""
+        self.solution_path = None  # Reset the solution path
+        
+        # If there are any other solution-related attributes, reset them as well
+        # For example, if there are any "visited" flags or markers used during the solving process
+        for row in self.grid:
+            for cell in row:
+                cell.visited = False  # Reset the visited status of each cell (if needed)
+                # Reset other attributes like "previous" if used in your solving algorithms
+                cell.previous = None   # Or whatever attribute is used to store the path information
+        print("Solution reset and maze marked as unsolved.")

@@ -3,6 +3,7 @@ from src.maze_viz import Visualizer
 from src.solver import DepthFirst
 from src.solver import BreadthFirst
 from src.solverAStar import AStar
+import pickle
 
 class MazeManager(object):
     """A manager that abstracts the interaction with the library's components. The graphs, animations, maze creation,
@@ -178,4 +179,5 @@ class MazeManager(object):
             return None
         
         solver = AStar(maze, neighbor_method, self.quiet_mode, heuristic_method)
-        maze.solution_path = solver.solve()
+        maze.solution_path = solver.solveAStar()
+    

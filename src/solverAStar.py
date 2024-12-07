@@ -52,7 +52,7 @@ class AStar(SolverAStar):
         """Calculate the Manhattan distance heuristic between current and goal coordinates."""
         return abs(current[0] - goal[0]) + abs(current[1] - goal[1])
 
-    def solve(self):
+    def solveAStar(self):
         """Implements the A* pathfinding algorithm to solve the maze."""
         logging.debug("Class AStar solve called")
         
@@ -66,6 +66,7 @@ class AStar(SolverAStar):
         
         if not self.quiet_mode:
             print("\nSolving the maze with A* pathfinding algorithm...")
+            print(self.heuristic_method)
         time_start = time.time()
         
         # Initialize cell details grid
