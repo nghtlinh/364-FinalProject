@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     # Show the solution animation.
     # manager.show_generation_animation(maze.id)
-    # manager.show_solution_animation(maze.id)
+    manager.show_solution_animation(maze.id)
 
     # Display the maze with the solution path.
     # manager.show_solution(maze.id)

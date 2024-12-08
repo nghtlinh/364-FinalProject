@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 from matplotlib import animation
 import logging
+import warnings
 
-logging.basicConfig(level=logging.DEBUG)
+logging.getLogger('matplotlib').setLevel(logging.WARNING)
+logging.getLogger('PIL').setLevel(logging.WARNING)
+warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
 
 
 class Visualizer(object):
@@ -249,7 +252,7 @@ class Visualizer(object):
                              [(i+1)*self.cell_size, i*self.cell_size], linewidth = 2, color = color_walls)[0]
                 self.squares["{},{}".format(i, j)] = plt.Rectangle((j*self.cell_size,
                                                                     i*self.cell_size), self.cell_size, self.cell_size,
-                                                                   fc = "purple", alpha = 0.4, visible = False)
+                                                                   fc = "darkgreen", alpha = 0.4, visible = False)
                 self.ax.add_patch(self.squares["{},{}".format(i, j)])
 
     def animate_maze_solution(self):
@@ -262,7 +265,7 @@ class Visualizer(object):
         # Adding indicator to see shere current search is happening.
         indicator = plt.Rectangle((self.maze.solution_path[0][0][0]*self.cell_size,
                                    self.maze.solution_path[0][0][1]*self.cell_size), self.cell_size, self.cell_size,
-                                  fc="purple", alpha=0.6)
+                                  fc="black", alpha=0.6)
         self.ax.add_patch(indicator)
 
         self.add_path()
@@ -272,7 +275,7 @@ class Visualizer(object):
             if frame > 0:
                 if self.maze.solution_path[frame - 1][1]:  # Color backtracking
                     self.squares["{},{}".format(self.maze.solution_path[frame - 1][0][0],
-                                           self.maze.solution_path[frame - 1][0][1])].set_facecolor("orange")
+                                           self.maze.solution_path[frame - 1][0][1])].set_facecolor("darkred")
 
                 self.squares["{},{}".format(self.maze.solution_path[frame - 1][0][0],
                                        self.maze.solution_path[frame - 1][0][1])].set_visible(True)
