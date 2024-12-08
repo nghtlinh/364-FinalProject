@@ -1,4 +1,3 @@
-
 import random
 import math
 import time
@@ -115,49 +114,44 @@ class Maze(object):
         else:
             return None
 
-    def validate_neighbours_solve(self, neighbour_indices, k, l, k_end, l_end, method = "fancy"):
+    def validate_neighbours_solve(self, neighbour_indices, k, l, k_end, l_end, method="fancy"):
         """Function that validates whether a neighbour is unvisited or not and discards the
-        neighbours that are inaccessible due to walls between them and the current cell. The
-        function implements two methods for choosing next cell; one is 'brute-force' where one
-        of the neighbours are chosen randomly. The other is 'fancy' where the next cell is chosen
-        based on which neighbour that gives the shortest distance to the final destination.
+        neighbours that are inaccessible due to walls between them and the current cell.
 
         Args:
-            neighbour_indices
-            k
-            l
-            k_end
-            l_end
-            method
+            neighbour_indices: List of potential neighbor coordinates
+            k: Current cell row
+            l: Current cell column
+            k_end: Target/exit row
+            l_end: Target/exit column
+            method: "fancy" uses distance heuristic, "brute-force" chooses randomly
 
-        Return:
-
-
+        Returns:
+            List of valid neighbors or None if no valid neighbors exist
         """
+        neigh_list = []
+
         if method == "fancy":
-            neigh_list = list()
-            min_dist_to_target = 100000
+            min_dist_to_target = float('inf')
+            min_neigh = None
 
             for k_n, l_n in neighbour_indices:
-                if (not self.grid[k_n][l_n].visited
+                if (not self.grid[k_n][l_n].visited 
                         and not self.grid[k][l].is_walls_between(self.grid[k_n][l_n])):
                     dist_to_target = math.sqrt((k_n - k_end) ** 2 + (l_n - l_end) ** 2)
-
-                    if (dist_to_target < min_dist_to_target):
+                    
+                    if dist_to_target < min_dist_to_target:
                         min_dist_to_target = dist_to_target
                         min_neigh = (k_n, l_n)
 
-            if "min_neigh" in locals():
+            if min_neigh is not None:
                 neigh_list.append(min_neigh)
 
         elif method == "brute-force":
             neigh_list = [n for n in neighbour_indices if not self.grid[n[0]][n[1]].visited
-                          and not self.grid[k][l].is_walls_between(self.grid[n[0]][n[1]])]
+                        and not self.grid[k][l].is_walls_between(self.grid[n[0]][n[1]])]
 
-        if len(neigh_list) > 0:
-            return neigh_list
-        else:
-            return None
+        return neigh_list if len(neigh_list) > 0 else None
 
     def _pick_random_entry_exit(self, used_entry_exit=None):
         """Function that picks random coordinates along the maze boundary to represent either
@@ -204,14 +198,34 @@ class Maze(object):
             binary_tree(self, start_coor)
 
     def reset_solution(self):
-        """Resets any solution-related state in the maze to its unsolved state."""
-        self.solution_path = None  # Reset the solution path
+        """
+        Resets all solution-related attributes and states in the maze to prepare for a new solution.
+        This ensures that previous solution attempts don't influence new ones.
+        """
+        # Reset maze-level solution attributes
+        self.solution_path = None
         
-        # If there are any other solution-related attributes, reset them as well
-        # For example, if there are any "visited" flags or markers used during the solving process
+        # Reset all cells to their initial solving state
         for row in self.grid:
             for cell in row:
-                cell.visited = False  # Reset the visited status of each cell (if needed)
-                # Reset other attributes like "previous" if used in your solving algorithms
-                cell.previous = None   # Or whatever attribute is used to store the path information
-        print("Solution reset and maze marked as unsolved.")
+                # Reset cell visit status
+                cell.visited = False
+                
+                # Reset pathfinding attributes
+                cell.previous = None  # For backtracking
+                if hasattr(cell, 'distance'):
+                    cell.distance = float('inf')  # For BFS
+                if hasattr(cell, 'f_score'):
+                    cell.f_score = float('inf')   # For A*
+        
+        # Reset entry/exit cells if they have special attributes
+        entry_cell = self.grid[self.entry_coor[0]][self.entry_coor[1]]
+        exit_cell = self.grid[self.exit_coor[0]][self.exit_coor[1]]
+        
+        entry_cell.visited = False
+        exit_cell.visited = False
+        
+        if hasattr(entry_cell, 'distance'):
+            entry_cell.distance = 0  # Start cell typically has distance 0
+            
+        print("Solution reset completed - maze restored to initial state")

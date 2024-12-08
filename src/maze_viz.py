@@ -112,8 +112,7 @@ class Visualizer(object):
 
         self.ax.add_patch(plt.Circle(((self.maze.solution_path[0][0][1] + 0.5)*self.cell_size,
                                       (self.maze.solution_path[0][0][0] + 0.5)*self.cell_size), 0.2*self.cell_size,
-                                     fc=(0, circle_num/(len(self.maze.solution_path) - 2*len(list_of_backtrackers)),
-                                         0), alpha=0.4))
+                                     fc=("purple"), alpha=0.4))
 
         for i in range(1, self.maze.solution_path.__len__()):
             if self.maze.solution_path[i][0] not in list_of_backtrackers and\
@@ -121,7 +120,7 @@ class Visualizer(object):
                 circle_num += 1
                 self.ax.add_patch(plt.Circle(((self.maze.solution_path[i][0][1] + 0.5)*self.cell_size,
                     (self.maze.solution_path[i][0][0] + 0.5)*self.cell_size), 0.2*self.cell_size,
-                    fc = (0, circle_num/(len(self.maze.solution_path) - 2*len(list_of_backtrackers)), 0), alpha = 0.4))
+                    fc = ("purple"), alpha = 0.4))
 
         # Display the plot to the user
         plt.show()
@@ -250,7 +249,7 @@ class Visualizer(object):
                              [(i+1)*self.cell_size, i*self.cell_size], linewidth = 2, color = color_walls)[0]
                 self.squares["{},{}".format(i, j)] = plt.Rectangle((j*self.cell_size,
                                                                     i*self.cell_size), self.cell_size, self.cell_size,
-                                                                   fc = "red", alpha = 0.4, visible = False)
+                                                                   fc = "purple", alpha = 0.4, visible = False)
                 self.ax.add_patch(self.squares["{},{}".format(i, j)])
 
     def animate_maze_solution(self):
@@ -296,7 +295,7 @@ class Visualizer(object):
 
         logging.debug("Creating solution animation")
         anim = animation.FuncAnimation(fig, animate, frames=self.maze.solution_path.__len__(),
-                                       interval=100, blit=True, repeat=False)
+                                   interval=5, blit=True, repeat=False)
         logging.debug("Finished creating solution animation")
 
         # Display the animation to the user
