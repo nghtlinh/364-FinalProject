@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 from matplotlib import animation
 import logging
+import warnings
 
-logging.basicConfig(level=logging.DEBUG)
+logging.getLogger('matplotlib').setLevel(logging.WARNING)
+logging.getLogger('PIL').setLevel(logging.WARNING)
+warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
 
 
 class Visualizer(object):
@@ -49,18 +52,14 @@ class Visualizer(object):
         # Display the plot to the user
         plt.show()
 
-        # Handle any potential saving
-        if self.media_filename:
-            fig.savefig("{}{}.png".format(self.media_filename, "_generation"), frameon=None)
-
     def plot_walls(self):
         """ Plots the walls of a maze. This is used when generating the maze image"""
         for i in range(self.maze.num_rows):
             for j in range(self.maze.num_cols):
                 if self.maze.initial_grid[i][j].is_entry_exit == "entry":
-                    self.ax.text(j*self.cell_size, i*self.cell_size, "START", fontsize=7, weight="bold")
+                    self.ax.text(j*self.cell_size, i*self.cell_size, "START", fontsize=5, weight="bold")
                 elif self.maze.initial_grid[i][j].is_entry_exit == "exit":
-                    self.ax.text(j*self.cell_size, i*self.cell_size, "END", fontsize=7, weight="bold")
+                    self.ax.text(j*self.cell_size, i*self.cell_size, "END", fontsize=5, weight="bold")
                 if self.maze.initial_grid[i][j].walls["top"]:
                     self.ax.plot([j*self.cell_size, (j+1)*self.cell_size],
                                  [i*self.cell_size, i*self.cell_size], color="k")
@@ -90,9 +89,9 @@ class Visualizer(object):
         self.ax.axes.get_xaxis().set_visible(False)
         self.ax.axes.get_yaxis().set_visible(False)
 
-        title_box = self.ax.text(0, self.maze.num_rows + self.cell_size + 0.1,
-                            r"{}$\times${}".format(self.maze.num_rows, self.maze.num_cols),
-                            bbox={"facecolor": "gray", "alpha": 0.5, "pad": 4}, fontname="serif", fontsize=15)
+        # title_box = self.ax.text(0, self.maze.num_rows + self.cell_size + 0.1,
+        #                     r"{}$\times${}".format(self.maze.num_rows, self.maze.num_cols),
+        #                     bbox={"facecolor": "gray", "alpha": 0.5, "pad": 4}, fontname="serif", fontsize=15)
 
         return fig
 
@@ -232,9 +231,9 @@ class Visualizer(object):
         for i in range(self.maze.num_rows):
             for j in range(self.maze.num_cols):
                 if self.maze.initial_grid[i][j].is_entry_exit == "entry":
-                    self.ax.text(j*self.cell_size, i*self.cell_size, "START", fontsize = 7, weight = "bold")
+                    self.ax.text(j*self.cell_size, i*self.cell_size, "START", fontsize = 5, weight = "bold")
                 elif self.maze.initial_grid[i][j].is_entry_exit == "exit":
-                    self.ax.text(j*self.cell_size, i*self.cell_size, "END", fontsize = 7, weight = "bold")
+                    self.ax.text(j*self.cell_size, i*self.cell_size, "END", fontsize = 5, weight = "bold")
 
                 if self.maze.initial_grid[i][j].walls["top"]:
                     self.lines["{},{}: top".format(i, j)] = self.ax.plot([j*self.cell_size, (j+1)*self.cell_size],
@@ -250,7 +249,7 @@ class Visualizer(object):
                              [(i+1)*self.cell_size, i*self.cell_size], linewidth = 2, color = color_walls)[0]
                 self.squares["{},{}".format(i, j)] = plt.Rectangle((j*self.cell_size,
                                                                     i*self.cell_size), self.cell_size, self.cell_size,
-                                                                   fc = "red", alpha = 0.4, visible = False)
+                                                                   fc = "darkgreen", alpha = 0.4, visible = False)
                 self.ax.add_patch(self.squares["{},{}".format(i, j)])
 
     def animate_maze_solution(self):
@@ -263,7 +262,7 @@ class Visualizer(object):
         # Adding indicator to see shere current search is happening.
         indicator = plt.Rectangle((self.maze.solution_path[0][0][0]*self.cell_size,
                                    self.maze.solution_path[0][0][1]*self.cell_size), self.cell_size, self.cell_size,
-                                  fc="purple", alpha=0.6)
+                                  fc="black", alpha=0.6)
         self.ax.add_patch(indicator)
 
         self.add_path()
@@ -273,7 +272,7 @@ class Visualizer(object):
             if frame > 0:
                 if self.maze.solution_path[frame - 1][1]:  # Color backtracking
                     self.squares["{},{}".format(self.maze.solution_path[frame - 1][0][0],
-                                           self.maze.solution_path[frame - 1][0][1])].set_facecolor("orange")
+                                           self.maze.solution_path[frame - 1][0][1])].set_facecolor("darkred")
 
                 self.squares["{},{}".format(self.maze.solution_path[frame - 1][0][0],
                                        self.maze.solution_path[frame - 1][0][1])].set_visible(True)

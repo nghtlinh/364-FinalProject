@@ -6,12 +6,11 @@ if __name__ == "__main__":
 
     # Initialize the MazeManager, which handles maze creation, solving, and visualization.
     manager = MazeManager()
-
-    # Add a 10x10 maze to the manager.
-    maze = manager.add_maze(10, 10)
+    maze = manager.add_maze(20, 20)
+    manager.show_maze(maze.id)
 
     # Solve the maze using multiple algorithms
-    manager.solve_maze(maze.id, "DepthFirst")
+    # manager.solve_maze(maze.id, "DepthFirst")
     # manager.solve_maze(maze.id, "BreadthFirst")
     # manager.solve_maze_with_A_Star(maze.id, "AStar", "Manhattan")
     # manager.solve_maze_with_A_Star(maze.id, "AStar", "Euclidean")
@@ -26,7 +25,7 @@ if __name__ == "__main__":
     # manager.show_generation_animation(maze.id)
 
     # Show the solution animation.
-    manager.show_solution_animation(maze.id)
+    # manager.show_solution_animation(maze.id)
 
     # Display the maze with the solution path.
     # manager.show_solution(maze.id)

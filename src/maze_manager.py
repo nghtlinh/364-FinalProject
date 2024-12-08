@@ -1,3 +1,4 @@
+import logging
 from src.maze import Maze
 from src.maze_viz import Visualizer
 from src.solver import DepthFirst
@@ -172,6 +173,7 @@ class MazeManager(object):
             neighbor_method:
 
         """
+        
         maze = self.get_maze(maze_id)
         if maze is None:
             print("Unable to locate maze. Exiting solver.")
@@ -179,3 +181,4 @@ class MazeManager(object):
         
         solver = AStar(maze, neighbor_method, self.quiet_mode, heuristic_method)
         maze.solution_path = solver.solve()
+    

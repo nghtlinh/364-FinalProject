@@ -2,8 +2,12 @@ import time
 import random
 import logging
 from src.maze import Maze
+import warnings
 
-logging.basicConfig(level=logging.DEBUG)
+logging.getLogger('matplotlib').setLevel(logging.WARNING)
+logging.getLogger('PIL').setLevel(logging.WARNING)
+warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
+logging.basicConfig(level=logging.INFO)  # Change to INFO to reduce verbosity
 
 class Solver(object):
     """Base class for solution methods.
@@ -25,15 +29,15 @@ class Solver(object):
         self.quiet_mode = quiet_mode
 
     def solve(self):
-        logging.debug('Class: Solver solve called')
+        # logging.debug('Class: Solver solve called')
         raise NotImplementedError
 
     def get_name(self):
-        logging.debug('Class Solver get_name called')
+        # logging.debug('Class Solver get_name called')
         raise self.name
 
     def get_path(self):
-        logging.debug('Class Solver get_path called')
+        # logging.debug('Class Solver get_path called')
         return self.path
 
 class BreadthFirst(Solver):

@@ -34,8 +34,8 @@ def depth_first_recursive_backtracker( maze, start_coor ):
                 k_curr, l_curr = visited_cells.pop()      # Pop previous visited cell (backtracking)
                 path.append((k_curr, l_curr))   # Add coordinates to part of generation path
 
-        print("Number of moves performed: {}".format(len(path)))
-        print("Execution time for algorithm: {:.4f}".format(time.time() - time_start))
+        # print("Number of moves performed: {}".format(len(path)))
+        # print("Execution time for algorithm: {:.4f}".format(time.time() - time_start))
 
         maze.grid[maze.entry_coor[0]][maze.entry_coor[1]].set_as_entry_exit("entry",
             maze.num_rows-1, maze.num_cols-1)

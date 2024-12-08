@@ -18,8 +18,6 @@ class SolverAStar(object):
     """
 
     def __init__(self, maze, quiet_mode, neighbor_method, heuristic_method):
-        logging.debug("Class Solver ctor called")
-
         self.maze = maze
         self.neighbor_method = neighbor_method
         self.name = ""
