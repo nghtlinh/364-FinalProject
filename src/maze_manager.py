@@ -1,8 +1,8 @@
 from src.maze import Maze
-from src.maze_viz import Visualizer
-from src.solver import DepthFirst
-from src.solver import BreadthFirst
-from src.solver import AStar
+from src.maze_vizualization import Visualizer
+from src.maze_solver import DepthFirst
+from src.maze_solver import BreadthFirst
+from src.maze_solver import AStar
 
 class MazeManager(object):
     """A manager that abstracts the interaction with the library's components. The graphs, animations, maze creation,

@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import unittest
 
-from src.solver import Solver
+from src.maze_solver import Solver
 
 
 

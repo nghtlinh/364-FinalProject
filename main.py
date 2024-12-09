@@ -25,19 +25,19 @@ if __name__ == "__main__":
     manager = MazeManager()
 
     # IF we don't have a maze and need to create a new one:
-    maze = manager.add_maze(20, 20)
-    save_maze_state(maze)  
+    # maze = manager.add_maze(15, 15)
+    # save_maze_state(maze)  
 
     # # IF we already have a saved maze:
-    # maze = load_maze_state()
-    # loaded_maze = manager.add_existing_maze(maze)
+    maze = load_maze_state()
+    loaded_maze = manager.add_existing_maze(maze)
     # manager.show_maze(maze.id)
     
     # Solve the maze using an algorithm (e.g., BreadthFirst)
-    # manager.solve_maze(maze.id, "DepthFirst")
+    manager.solve_maze(maze.id, "DepthFirst")
     # manager.solve_maze(maze.id, "BreadthFirst")
     # manager.solve_maze(maze.id, "AStar", "Manhattan")
-    manager.solve_maze(maze.id, "AStar", "Euclidean")
+    # manager.solve_maze(maze.id, "AStar", "Euclidean")
 
     # Show the solution animation.
     # manager.show_generation_animation(maze.id)
